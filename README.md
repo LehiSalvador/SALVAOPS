@@ -28,3 +28,7 @@ Windows, Claude Code, Codex, agentes de IA, Skills, MCPs e integraciones con Git
 
 - [Portafolio de Lehi Salvador](https://github.com/LehiSalvador)
 - [Salva Systems](https://salvasystems.site)
+
+## Documentación de producto
+
+[Contexto y alcance](docs/overview.md) · [Hoja de ruta pública](docs/roadmap.md)
