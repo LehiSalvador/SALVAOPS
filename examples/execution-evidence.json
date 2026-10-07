@@ -1,0 +1,40 @@
+{
+  "schema_version": "0.1",
+  "run_id": "demo-run",
+  "project_id": "demo-project",
+  "task": {
+    "task_id": "demo-task",
+    "objective": "Validar un documento ficticio",
+    "constraints": [
+      "Sin red",
+      "Sin credenciales",
+      "Solo ejemplo público"
+    ]
+  },
+  "actor": {
+    "type": "ai_agent",
+    "role": "documentation-validator"
+  },
+  "created_at": "2026-01-01T12:00:00Z",
+  "updated_at": "2026-01-01T12:01:00Z",
+  "status": "succeeded",
+  "approval": {
+    "required": false,
+    "status": "not_required"
+  },
+  "result": {
+    "summary": "Resultado ficticio para explicar el contrato.",
+    "validations": [
+      {
+        "check": "documentation",
+        "status": "passed"
+      }
+    ]
+  },
+  "artifacts": [
+    {
+      "title": "Artefacto ficticio",
+      "url": "https://example.com/demo/evidence"
+    }
+  ]
+}

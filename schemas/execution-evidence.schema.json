@@ -1,0 +1,286 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "project_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "task_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "objective": {
+          "type": "string",
+          "minLength": 1
+        },
+        "constraints": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "task_id",
+        "objective",
+        "constraints"
+      ]
+    },
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "human",
+            "ai_agent"
+          ]
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "type",
+        "role"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "minLength": 1,
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "minLength": 1,
+      "format": "date-time"
+    },
+    "status": {
+      "enum": [
+        "planned",
+        "running",
+        "succeeded",
+        "failed",
+        "blocked",
+        "cancelled"
+      ]
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "status": {
+          "enum": [
+            "not_required",
+            "pending",
+            "approved",
+            "denied"
+          ]
+        },
+        "reference_url": {
+          "type": "string",
+          "minLength": 1,
+          "format": "uri",
+          "pattern": "^https://[^\\s]+$"
+        }
+      },
+      "required": [
+        "required",
+        "status"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "required": {
+                "const": true
+              }
+            },
+            "required": [
+              "required"
+            ]
+          },
+          "then": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "pending",
+                  "approved",
+                  "denied"
+                ]
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "status": {
+                "const": "not_required"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "approved"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "required": [
+              "reference_url"
+            ]
+          }
+        }
+      ]
+    },
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "validations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "check": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "enum": [
+                  "passed",
+                  "failed",
+                  "skipped"
+                ]
+              },
+              "reference_url": {
+                "type": "string",
+                "minLength": 1,
+                "format": "uri",
+                "pattern": "^https://[^\\s]+$"
+              }
+            },
+            "required": [
+              "check",
+              "status"
+            ]
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "summary",
+        "validations"
+      ]
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "url": {
+            "type": "string",
+            "minLength": 1,
+            "format": "uri",
+            "pattern": "^https://[^\\s]+$"
+          }
+        },
+        "required": [
+          "title",
+          "url"
+        ]
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "run_id",
+    "project_id",
+    "task",
+    "actor",
+    "created_at",
+    "updated_at",
+    "status",
+    "approval"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "succeeded"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "required": [
+          "result"
+        ],
+        "properties": {
+          "approval": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "not_required",
+                  "approved"
+                ]
+              }
+            }
+          },
+          "result": {
+            "properties": {
+              "validations": {
+                "items": {
+                  "properties": {
+                    "status": {
+                      "const": "passed"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Proposed SalvaOps execution evidence manifest",
+  "description": "Generic public proposal. Never include credentials or private execution logs."
+}

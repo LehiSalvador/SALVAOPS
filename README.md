@@ -36,3 +36,7 @@ Windows, Claude Code, Codex, agentes de IA, Skills, MCPs e integraciones con Git
 ## Contribuir
 
 [Guía de contribución](CONTRIBUTING.md). La validación automática revisa documentos locales; los cambios de producto y datos privados se coordinan por separado.
+
+## Contrato propuesto
+
+[Formato genérico y ejemplo ficticio](docs/execution-contract.md). Propuesta documentada; no representa una API implementada.
